@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Numbers 1–100 with Sound</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', Arial, sans-serif;
+  background-color: #18a6a0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  background: #e9f9f9;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #ffcc00;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+/* gambar atas */
+.top-image {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.top-image img {
+  max-width: 220px;
+}
+
+/* grid angka */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+.number {
+  font-size: 42px;
+  color: #ff66b2;
+  font-weight: bold;
+}
+
+.word {
+  font-size: 14px;
+  color: #333;
+  margin-top: 5px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>NUMBERS 1–100</h1>
+
+  <!-- GAMBAR ATAS TENGAH -->
+  <div class="top-image">
+    <img src="zaina.png" alt="Kids Learning Numbers">
+  </div>
+
+  <!-- GRID ANGKA -->
+  <div class="grid" id="numbersGrid"></div>
+
+  <div class="footer">
+    👆 Klik angka untuk mendengar cara bacanya
+  </div>
+
+</div>
+
+<script>
+// fungsi angka ke kata
+function numberToWords(num) {
+  const ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
+  const teens = ["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+  const tens = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+
+  if (num < 10) return ones[num];
+  if (num >= 10 && num < 20) return teens[num - 10];
+  if (num < 100) {
+    return tens[Math.floor(num / 10)] + (num % 10 !== 0 ? "-" + ones[num % 10] : "");
+  }
+  return "one hundred";
+}
+
+// suara
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+
+// generate 1–100
+const grid = document.getElementById("numbersGrid");
+for (let i = 1; i <= 100; i++) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.onclick = () => speak(numberToWords(i));
+
+  card.innerHTML = `
+    <div class="number">${i}</div>
+    <div class="word">${numberToWords(i).toUpperCase()}</div>
+  `;
+
+  grid.appendChild(card);
+}
+</script>
+
+</body>
+</html>
